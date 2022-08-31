@@ -1,11 +1,11 @@
-package ciaran.application.mysqlTables;
+package ciaran.application.todoapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class MysqlTablesApplication {
+public class Todoapp {
     public static void main(String[] args) {
-        SpringApplication.run(MysqlTablesApplication.class, args);
+        SpringApplication.run(Todoapp.class, args);
     }
 }
