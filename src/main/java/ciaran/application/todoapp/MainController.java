@@ -2,24 +2,26 @@ package ciaran.application.todoapp;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.jose4j.lang.JoseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.google.gson.Gson;
 import ciaran.application.service.jwtUserService;
+
+import java.io.IOException;
+
 import java.util.HashMap;
 import java.util.Optional;
 import java.util.Map;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @RestController
 @RequestMapping("/user")
@@ -37,7 +39,7 @@ public class MainController {
     }
 
     @GetMapping("/all")
-    public @ResponseBody Iterable<User> getAllUsers() {
+    public @ResponseBody Iterable<User> getAllUsers(@RequestHeader("token") String token) throws IOException {
         return userRepository.findAll();
     }
 
@@ -54,7 +56,8 @@ public class MainController {
 
     @PostMapping(value = "/loginUser", consumes = { MediaType.APPLICATION_JSON_VALUE }, produces = {
             MediaType.APPLICATION_JSON_VALUE })
-    public @ResponseBody String login(@RequestBody String request) throws JoseException {
+    public @ResponseBody String login(@RequestBody String request)
+            throws IOException {
         Gson gson = new Gson();
         User deSerializedJsonString = gson.fromJson(request, User.class);
         User loginUser = userRepository.findByEmail(deSerializedJsonString.getEmail());
